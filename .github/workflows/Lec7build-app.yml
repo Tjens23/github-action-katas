@@ -1,5 +1,7 @@
 name: Build App exercise
+
 on: [push]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -7,12 +9,17 @@ jobs:
     steps:
       - name: Clone repository
         uses: actions/checkout@v5
+      - name: Make build script executable
+        run: chmod +x ci/build-app.sh
       - run: ci/build-app.sh
+
   test:
+    needs: build
     runs-on: ubuntu-latest
     container: gradle:6-jdk11
     steps:
       - name: Clone repo
         uses: actions/checkout@v5
-        needs: [build]
-        run: ci/unit-test-app.sh
+      - name: Make test script executable
+        run: chmod +x ci/unit-test-app.sh
+      - run: ci/unit-test-app.sh
