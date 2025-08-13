@@ -8,7 +8,7 @@ jobs:
     container: gradle:6-jdk11
     steps:
       - name: Clone down repository
-        uses: actions/checkout@v4       
+        uses: actions/checkout@v5       
       - name: Build application
         run: ci/build-app.sh
     
@@ -16,7 +16,7 @@ jobs:
         run: ci/unit-test-app.sh
       
       - name: Upload repo
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with: 
           name: code
           path: .
@@ -25,7 +25,7 @@ jobs:
     needs: [Build]
     steps:
       - name: Download code
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: code
           path: .
@@ -34,4 +34,22 @@ jobs:
         env:
           DEFAULT_BRANCH: main
           DISABLE_ERRORS: true
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}    
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}   
+  Docker-image:
+    runs-on: ubuntu-latest
+    needs: [Build]
+    permissions:
+      packages: write
+    steps:
+      - name: Download code
+        uses: actions/download-artifact@v5
+        with:
+          name: code
+          path: .
+        env: 
+          docker_username: ${{ github.actor }} 
+          docker_password: ${{ secrets.GITHUB_TOKEN }}
+      - name: build docker
+        run: bash ci/build-docker.sh
+      - name: push docker
+        run: bash ci/push-docker.sh
