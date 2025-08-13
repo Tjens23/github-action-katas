@@ -18,6 +18,8 @@ jobs:
         with: 
           name: code
           path: .
+        env:
+          include-hidden-files: true
   Linting:
     runs-on: ubuntu-latest
     needs: [Build]
@@ -39,7 +41,7 @@ jobs:
     permissions:
       packages: write
     env:
-      docker_username: ${{ github.actor }}
+      docker_username: tjens23
       docker_password: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_REPOSITORY: ${{ github.repository }}
     steps:
