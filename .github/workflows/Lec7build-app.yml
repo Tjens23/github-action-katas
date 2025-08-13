@@ -1,0 +1,10 @@
+name: Build App exercise
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container: [gradle:6-jdk11]
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v5
+      - run: ci/build-app.sh 
