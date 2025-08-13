@@ -37,6 +37,9 @@ jobs:
   Docker-image:
     runs-on: ubuntu-latest
     needs: [Build]
+    env:
+      docker_username: tjens23
+      docker_password: ${{ secrets.DOCKER_PASSWORD }}
     permissions:
       packages: write
     steps:
