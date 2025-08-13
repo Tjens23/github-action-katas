@@ -48,6 +48,6 @@ jobs:
     - name: ls
       run: ls -la ci
     - name: build docker
-      run: bash ci/build-docker.sh
+      run: bash ci/build-docker.sh ${{ github.repository }}
     - name: push docker
       run: bash ci/push-docker.sh
