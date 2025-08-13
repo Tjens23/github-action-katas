@@ -1,7 +1,5 @@
 name: Main workflow
-
 on: [push]
-
 jobs:
   Build:
     runs-on: ubuntu-latest
@@ -40,15 +38,16 @@ jobs:
     needs: [Build]
     permissions:
       packages: write
+    env:
+      docker_username: ${{ github.actor }}
+      docker_password: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_REPOSITORY: ${{ github.repository }}
     steps:
       - name: Download code
         uses: actions/download-artifact@v5
         with:
           name: code
           path: .
-        env: 
-          docker_username: ${{ github.actor }} 
-          docker_password: ${{ secrets.GITHUB_TOKEN }}
       - name: build docker
         run: bash ci/build-docker.sh
       - name: push docker
