@@ -39,17 +39,15 @@ jobs:
     needs: [Build]
     permissions:
       packages: write
-    env:
-      docker_username: tjens23
-      docker_password: ${{ secrets.DOCKER_PASSWORD }}
-      GITHUB_REPOSITORY: ${{ github.repository }}
     steps:
-      - name: Download code
-        uses: actions/download-artifact@v5
-        with:
-          name: code
-          path: .
-      - name: build docker
-        run: bash ci/build-docker.sh
-      - name: push docker
-        run: bash ci/push-docker.sh
+    - name: Download code
+      uses: actions/download-artifact@v4
+      with:
+        name: code
+        path: .
+    - name: ls
+      run: ls -la ci
+    - name: build docker
+      run: bash ci/build-docker.sh
+    - name: push docker
+      run: bash ci/push-docker.sh
